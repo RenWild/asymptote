@@ -928,6 +928,12 @@ impl<'a> Search<'a> {
             }
         }
 
+        if let Some(eval) = eval {
+            if eval + Piece::Queen.value() < alpha {
+                return Some(alpha);
+            }
+        }
+
         let mut moves = MovePicker::qsearch(&self.position);
 
         let mut best_move = None;
