@@ -46,6 +46,7 @@ const SEE_PRUNING_MARGIN_QUIET: Score = -100;
 const STATIC_BETA_DEPTH: Depth = 5 * INC_PLY;
 const STATIC_BETA_MARGIN: Score = 128;
 const QS_FUTILITY_MARGIN: Score = 200;
+const LMP_MIN_DEPTH: Depth = 2 * INC_PLY;
 const LMP_MAX_DEPTH: Depth = 5 * INC_PLY;
 const LMP_MOVES: [i16; (LMP_MAX_DEPTH / INC_PLY) as usize] = [0, 4, 8, 16, 32];
 
@@ -702,6 +703,7 @@ impl<'a> Search<'a> {
             }
 
             if depth < LMP_MAX_DEPTH
+                && depth >= LMP_MIN_DEPTH
                 && !is_pv
                 && !in_check
                 && !check
