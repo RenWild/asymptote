@@ -141,6 +141,7 @@ pub const BISHOP_PAIR: EScore = S(42, 48);
 pub const ROOK_OPEN_FILE: EScore = S(30, 8);
 pub const ROOK_HALFOPEN_FILE: EScore = S(10, 18);
 pub const ROOK_PAIR: EScore = S(17, -58);
+pub const ROOK_CONNECTED: EScore = S(3, 4);
 
 #[rustfmt::skip]
 pub const KING_SAFETY: [Score; 30] = [
@@ -560,11 +561,20 @@ impl Eval {
     }
 
     pub fn rooks_for_side(&mut self, pos: &Position, white: bool) -> EScore {
+        let s = white as usize;
         let us = pos.us(white);
 
         let mut score = 0;
 
         for rook in (pos.rooks() & us).squares() {
+            let connected = self.attacked_by[s][Piece::Rook.index()] & rook;
+            if connected {
+                score += ROOK_CONNECTED;
+                #[cfg(feature = "tune")]
+                {
+                    self.trace.rooks_connected[white as usize] += 1;
+                }
+            }
             let file_bb = FILES[rook.file() as usize];
             if (pos.pawns() & file_bb).is_empty() {
                 score += ROOK_OPEN_FILE;
