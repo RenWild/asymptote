@@ -134,6 +134,7 @@ pub const PASSED_PAWN_ON_FILE: [EScore; 8] = [
 ];
 
 pub const KNIGHT_OUTPOST: EScore = S(29, -8);
+pub const KNIGHT_OPEN_FILE_BLOCKER: EScore = S(6, 15);
 
 pub const XRAYED_SQUARE: EScore = S(5, 0);
 pub const BISHOP_PAIR: EScore = S(42, 48);
@@ -527,14 +528,28 @@ impl Eval {
             let possible_attackers = PAWN_CORRIDOR[s][sq] & !file;
             (possible_attackers & pos.pawns() & them).at_least_one()
         };
+        let opponent_has_rooks = self.material[1-s][Piece::Rook.index()] > 0;
 
         for knight in (pos.knights() & us).squares() {
-            if KNIGHT_OUTPOSTS[s] & knight && !attackable_by_pawn(knight) {
+            let is_outpost = KNIGHT_OUTPOSTS[s] & knight && !attackable_by_pawn(knight);
+            let is_on_open_file = (FILES[knight.file() as usize] & pos.pawns()).is_empty();
+            let is_protected_by_pawn = self.attacked_by[s][Piece::Pawn.index()] & knight;
+            
+            if is_outpost {
                 score += KNIGHT_OUTPOST;
 
                 #[cfg(feature = "tune")]
                 {
                     self.trace.knight_outposts[s] += 1;
+                }
+            }
+            
+            if opponent_has_rooks && is_on_open_file && is_protected_by_pawn {
+                score += KNIGHT_OPEN_FILE_BLOCKER;
+
+                #[cfg(feature = "tune")]
+                {
+                    self.trace.knight_open_file_blocker[s] += 1;
                 }
             }
         }
