@@ -84,12 +84,12 @@ const TUNE_KING_CHECK_ROOK: bool = false;
 const TUNE_KING_CHECK_QUEEN: bool = false;
 const TUNE_KING_DANGER: bool = false;
 
-const TUNE_PST_PAWN: bool = false;
-const TUNE_PST_KNIGHT: bool = false;
-const TUNE_PST_BISHOP: bool = false;
-const TUNE_PST_ROOK: bool = false;
-const TUNE_PST_QUEEN: bool = false;
-const TUNE_PST_KING: bool = false;
+const TUNE_PST_PAWN: bool = true;
+const TUNE_PST_KNIGHT: bool = true;
+const TUNE_PST_BISHOP: bool = true;
+const TUNE_PST_ROOK: bool = true;
+const TUNE_PST_QUEEN: bool = true;
+const TUNE_PST_KING: bool = true;
 
 #[derive(Clone)]
 pub struct Trace {
