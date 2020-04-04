@@ -72,6 +72,20 @@ impl TT {
         bound: Bound,
         eval: Option<Score>,
     ) {
+        let mut flags = 0;
+        if eval.is_some() {
+            flags |= FLAG_HAS_SCORE;
+        }
+
+        if best_move.is_some() {
+            flags |= FLAG_HAS_MOVE;
+        }
+
+        let best_move = best_move.map_or(TTMove { from: 0, to: 0 }, TTMove::from);
+        let eval = eval.unwrap_or_default();
+        let generation = self.generation;
+
+        let mut depth = depth;
         let mut replace_age = None;
         let mut age_depth = Depth::max_value();
         let mut replace_depth = None;
@@ -84,6 +98,17 @@ impl TT {
                 if entry.key == (hash >> 32) as u32 {
                     if bound != EXACT_BOUND && depth < entry.depth - 3 * INC_PLY {
                         return;
+                    }
+
+                    // We don't want to overwrite a higher depth entry with the same entry just with lower depth.
+                    if depth < entry.depth
+                        && score == entry.score
+                        && best_move == entry.best_move
+                        && bound == entry.bound
+                        && entry.eval == eval
+                        && entry.flags == flags
+                    {
+                        depth = entry.depth;
                     }
 
                     replace = i;
@@ -110,15 +135,6 @@ impl TT {
             replace = i;
         }
 
-        let mut flags = 0;
-        if eval.is_some() {
-            flags |= FLAG_HAS_SCORE;
-        }
-
-        if best_move.is_some() {
-            flags |= FLAG_HAS_MOVE;
-        }
-
         unsafe {
             self.table
                 .get_unchecked_mut((hash & self.bitmask) as usize)
@@ -126,10 +142,10 @@ impl TT {
                 key: (hash >> 32) as u32,
                 depth,
                 score,
-                best_move: best_move.map_or(TTMove { from: 0, to: 0 }, TTMove::from),
+                best_move,
                 bound,
-                generation: self.generation,
-                eval: eval.unwrap_or(0),
+                generation,
+                eval,
                 flags,
             }
         };
