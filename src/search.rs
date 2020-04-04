@@ -350,6 +350,7 @@ impl<'a> Search<'a> {
         self.visited_nodes += 1;
         self.max_ply_searched = cmp::max(ply, self.max_ply_searched);
         let is_pv = alpha + 1 != beta;
+        let in_check = self.position.in_check();
 
         // Mate distance pruning
         let mdp_alpha = cmp::max(alpha, -MATE_SCORE + ply);
@@ -408,7 +409,7 @@ impl<'a> Search<'a> {
                 }
             }
 
-            if !is_pv {
+            if !is_pv && !in_check {
                 eval = ttentry.get_eval();
             }
         }
@@ -473,13 +474,12 @@ impl<'a> Search<'a> {
             }
         }
 
-        if eval.is_none() && !is_pv {
+        if eval.is_none() && !is_pv && !in_check {
             eval = Some(self.eval.score(&self.position, self.hasher.get_pawn_hash()));
         }
 
         let previous_move = self.stack[ply as usize - 1].current_move;
         let nullmove_reply = previous_move == None;
-        let in_check = !nullmove_reply && self.position.in_check();
         let mut skip_quiets = false;
 
         if let Some(eval) = eval {
