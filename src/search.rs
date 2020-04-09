@@ -611,7 +611,7 @@ impl<'a> Search<'a> {
                         && !check
                         && depth < 9 * INC_PLY
                         && mtype == MoveType::Quiet
-                        && eval + 64 + 64 * (depth / INC_PLY) < alpha
+                        && eval + 100 * (depth / INC_PLY) < alpha
                     {
                         pruned = true;
                         continue;
