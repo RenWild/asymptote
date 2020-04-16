@@ -61,12 +61,12 @@ const TUNE_MOBILITY_BISHOP: bool = false;
 const TUNE_MOBILITY_ROOK: bool = false;
 const TUNE_MOBILITY_QUEEN: bool = false;
 
-const TUNE_CENTER_CONTROL: bool = true;
+const TUNE_CENTER_CONTROL: bool = false;
 
 const TUNE_PAWNS_DOUBLED: bool = false;
 const TUNE_PAWNS_ISOLATED: bool = false;
 const TUNE_PAWNS_OPEN_ISOLATED: bool = false;
-const TUNE_PAWNS_PASSED: bool = false;
+const TUNE_PAWNS_PASSED: bool = true;
 
 const TUNE_KNIGHT_OUTPOST: bool = false;
 
