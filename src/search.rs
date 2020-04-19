@@ -37,8 +37,6 @@ pub const MAX_PLY: Ply = 128;
 
 const CHECK_EXTENSION_DEPTH: Depth = 3 * INC_PLY;
 const FUTILITY_MARGIN: Score = 200;
-const HISTORY_PRUNING_DEPTH: Depth = 2 * INC_PLY;
-const HISTORY_PRUNING_THRESHOLD: i64 = 0;
 const LMR_DEPTH: Depth = 3 * INC_PLY;
 const SEE_PRUNING_DEPTH: Depth = 5 * INC_PLY;
 const SEE_PRUNING_MARGIN_CAPTURE: Score = -25;
@@ -613,22 +611,6 @@ impl<'a> Search<'a> {
                         && mtype == MoveType::Quiet
                         && eval + 64 + 64 * (depth / INC_PLY) < alpha
                     {
-                        pruned = true;
-                        continue;
-                    }
-
-                    // History leaf pruning
-                    //
-                    // Do not play moves with negative history score if at very low
-                    // depth.
-                    if depth < HISTORY_PRUNING_DEPTH
-                        && mtype == MoveType::Quiet
-                        && self.history.get_score(self.position.white_to_move, mov)
-                            < HISTORY_PRUNING_THRESHOLD
-                    {
-                        // We can skip the remaining quiet moves because quiet moves
-                        // are ordered by history score.
-                        moves.skip_quiets(true);
                         pruned = true;
                         continue;
                     }
