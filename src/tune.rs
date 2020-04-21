@@ -49,11 +49,11 @@ use crate::types::SquareMap;
 
 const TUNE_TEMPO: bool = false;
 
-const TUNE_MATERIAL_PAWN: bool = false;
-const TUNE_MATERIAL_KNIGHT: bool = false;
-const TUNE_MATERIAL_BISHOP: bool = false;
-const TUNE_MATERIAL_ROOK: bool = false;
-const TUNE_MATERIAL_QUEEN: bool = false;
+const TUNE_MATERIAL_PAWN: bool = true;
+const TUNE_MATERIAL_KNIGHT: bool = true;
+const TUNE_MATERIAL_BISHOP: bool = true;
+const TUNE_MATERIAL_ROOK: bool = true;
+const TUNE_MATERIAL_QUEEN: bool = true;
 
 const TUNE_MOBILITY_PAWN: bool = false;
 const TUNE_MOBILITY_KNIGHT: bool = false;

@@ -76,10 +76,10 @@ const SF_PAWNLESS: i32 = 32;
 pub const TEMPO_SCORE: EScore = S(26, 23);
 
 pub const PAWN_SCORE: EScore = S(100, 121);
-pub const KNIGHT_SCORE: EScore = S(330, 290);
-pub const BISHOP_SCORE: EScore = S(324, 318);
-pub const ROOK_SCORE: EScore = S(459, 568);
-pub const QUEEN_SCORE: EScore = S(990, 1000);
+pub const KNIGHT_SCORE: EScore = S(369, 290);
+pub const BISHOP_SCORE: EScore = S(358, 327);
+pub const ROOK_SCORE: EScore = S(470, 574);
+pub const QUEEN_SCORE: EScore = S(989, 1022);
 
 pub const PAWN_MOBILITY: EScore = S(9, 6);
 #[rustfmt::skip]
