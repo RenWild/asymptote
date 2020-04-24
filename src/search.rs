@@ -730,6 +730,10 @@ impl<'a> Search<'a> {
                 if is_pv {
                     reduction -= INC_PLY;
                 }
+
+                if ttmove.map_or(false, |mov| mov.captured.is_some()) {
+                    reduction += INC_PLY;
+                }
             };
 
             extension = cmp::min(extension, INC_PLY);
